@@ -13,7 +13,6 @@ module Nagios
       def parse(args)
         option_parser(args) do |opt|
           opt.on("-f", "--file FILE_PATH", "Path to file") do |value|
-            p value
             @options[:file] = value
           end
         end
