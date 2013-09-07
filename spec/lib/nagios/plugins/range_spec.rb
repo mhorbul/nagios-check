@@ -73,6 +73,21 @@ describe Range do
       range.check_range(20).should  eq(true) # = 20
       range.check_range(15).should  eq(true) # > 10 && < 20
     end
+
+    it "should check range with float numbers '@10.5:20'" do
+      range = Nagios::Plugin::Range.new("@10.5:20") # x < 10.5 && 20 > x
+      range.check_range(0).should     eq(false)
+      range.check_range(5).should     eq(false)
+      range.check_range(-10).should   eq(false)
+      range.check_range(30).should    eq(false)
+      range.check_range(10).should    eq(false)
+      range.check_range(10.4).should  eq(false)
+
+      range.check_range(10.5).should  eq(true) # = 10.5
+      range.check_range(20).should    eq(true) # = 20
+      range.check_range(15).should    eq(true) # > 10 && < 20
+    end
+
   end
 
 end

@@ -31,14 +31,15 @@ module Nagios
       def parse_range_string(range)
         @start_infinity = true if range.gsub!(/^~/, '')
         @alert_on = :outside if range.gsub!(/^@/, '')
+        regexp = '([+\-]?[\d+\.]+)'
         case range
-        when /^:?([+\-]?\d+)$/ # :10 or 10
-          @end_value = Integer($1)
-        when /^([+\-]?\d+):([+\-]?\d+)$/ # 10:20
-          @start_value = Integer($1)
-          @end_value = Integer($2)
-        when /^([+\-]?\d+):$/ # 10:
-          @start_value = Integer($1)
+        when /^:?(#{regexp})$/ # :10 or 10
+          @end_value = Float($1)
+        when /^#{regexp}:#{regexp}$/ # 10:20
+          @start_value = Float($1)
+          @end_value = Float($2)
+        when /^#{regexp}:$/ # 10:
+          @start_value = Float($1)
           @end_infinity = true
         else
           raise TypeError, "Unknown threshold format. Please check the documentation http://nagiosplug.sourceforge.net/developer-guidelines.html#THRESHOLDFORMAT"
