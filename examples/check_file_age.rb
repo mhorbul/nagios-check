@@ -1,5 +1,7 @@
 #!/usr/bin/env -- ruby
-
+#
+# Usage: check_file_age --file /path/to/file -w 3600 -c 4800
+#
 $LOAD_PATH.push './lib'
 
 require 'nagios'
