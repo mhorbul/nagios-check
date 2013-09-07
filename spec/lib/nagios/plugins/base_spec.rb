@@ -55,6 +55,18 @@ describe Nagios::Plugin::Base do
       message.should eq("WARNING - does not work.\n")
     end
 
+    it "should exit with Unknown status when check method raises error" do
+      plugin = Nagios::Plugin::Base.new
+      begin
+        message = capture_output do
+          plugin.run
+        end
+      rescue SystemExit => e
+        e.status.should eq(Nagios::UNKNOWN)
+      end
+      message.should eq("UNKNOWN - Nagios::Plugin::Base#check method should be implemented in the child class\n")
+    end
+
   end
 
   context "options parser" do

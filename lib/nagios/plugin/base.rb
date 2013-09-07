@@ -16,6 +16,15 @@ module Nagios
         @options = {}.merge!(default_options)
       end
 
+      def run(args)
+        parse(args)
+        begin
+          check
+        rescue => e
+          nagios_exit(:unknown, e.to_s)
+        end
+      end
+
       def perfoutput
       end
 
@@ -47,6 +56,7 @@ module Nagios
         self.threshold.get_status(value)
       end
 
+      private
       def option_parser(args)
         OptionParser.new do |opt|
           opt.on_tail("-h", "--help", "Show this message") do
@@ -61,6 +71,10 @@ module Nagios
           end
           yield opt if block_given?
         end.parse!(args)
+      end
+
+      def check
+        raise "#{self.class.name}#check method should be implemented in the child class"
       end
 
     end

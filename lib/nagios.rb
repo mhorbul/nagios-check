@@ -1,4 +1,5 @@
 require 'logger'
+require 'optparse'
 
 module Nagios
 
@@ -13,8 +14,6 @@ module Nagios
     :critical => CRITICAL,
     :unknown =>  UNKNOWN
   }
-
-  autoload :Plugin, "nagios/plugin"
 
   def self.logger=(logger)
     @logger = logger
