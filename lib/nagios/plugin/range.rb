@@ -6,16 +6,16 @@ module Nagios
       attr_reader :start_value, :end_value, :start_infinity, :end_infinity, :alert_on
 
       def initialize(range)
-        raise TypeError, "String is expected" unless range.is_a?(String)
         @start_value = 0
         @end_value = 0
         @start_infinity = false
         @end_infinity = false
         @alert_on = :inside
-        parse_range_string(range)
+        parse_range_string(range.to_s)
       end
 
       def check_range(value)
+        value = value.to_f
         result =
           if !start_infinity && end_infinity
             start_value <= value

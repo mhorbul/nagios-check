@@ -22,7 +22,7 @@ describe Nagios::Plugin::Threshold do
     threshold = Nagios::Plugin::Threshold.new
     threshold.warn.should be_nil
     threshold.crit.should be_nil
-    threshold.warn(10)
+    threshold.warn("10::")
     threshold.crit(false)
     threshold.warn.should be_nil
     threshold.crit.should be_nil

@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Range do
 
   it "should raise error when range is not a string" do
-    lambda { Nagios::Plugin::Range.new(1) }.should raise_error(TypeError)
     lambda { Nagios::Plugin::Range.new(:x) }.should raise_error(TypeError)
     lambda { Nagios::Plugin::Range.new(nil) }.should raise_error(TypeError)
     lambda { Nagios::Plugin::Range.new(true) }.should raise_error(TypeError)
@@ -16,6 +15,24 @@ describe Range do
   end
 
   context "parse string value correctly" do
+
+    it "should convert string check value into float" do
+      range = Nagios::Plugin::Range.new("10") # 0 <= x >= 10
+      range.check_range("10").should  eq(false)
+      range.check_range("5.5").should   eq(false)
+      range.check_range("0").should   eq(false)
+      range.check_range("20").should  eq(true) # > 10
+      range.check_range("-10").should eq(true) # < 0
+    end
+
+    it "should convert numeric range value into string" do
+      range = Nagios::Plugin::Range.new(10) # 0 <= x >= 10
+      range.check_range(10).should  eq(false)
+      range.check_range(5).should   eq(false)
+      range.check_range(0).should   eq(false)
+      range.check_range(20).should  eq(true) # > 10
+      range.check_range(-10).should eq(true) # < 0
+    end
 
     it "should check range '10'" do
       range = Nagios::Plugin::Range.new("10") # 0 <= x >= 10

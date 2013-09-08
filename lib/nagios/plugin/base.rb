@@ -21,7 +21,7 @@ module Nagios
         begin
           check
         rescue => e
-          nagios_exit(:unknown, e.to_s)
+          nagios_exit(:unknown, "#{e.class}: #{e.to_s}\n#{e.backtrace.join("\n")}")
         end
       end
 
@@ -87,7 +87,7 @@ module Nagios
       end
 
       def check
-        raise "#{self.class.name}#check method should be implemented in the child class"
+        nagios_exit :unknown, "#{self.class.name}#check method should be implemented in the child class"
       end
 
     end
