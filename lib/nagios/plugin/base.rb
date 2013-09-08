@@ -2,7 +2,7 @@ module Nagios
   module Plugin
     class Base
 
-      attr_reader :threshold, :options
+      attr_reader :thresholds, :options
 
       class << self
         def shortname(value = nil)
@@ -12,11 +12,11 @@ module Nagios
       end
 
       def initialize
-        @threshold = Threshold.new
+        @thresholds = {}
         @options = {}.merge!(default_options)
       end
 
-      def run(args)
+      def run(args = [])
         parse(args)
         begin
           check
@@ -52,8 +52,21 @@ module Nagios
         exit exit_code
       end
 
-      def check_threshold(value)
-        self.threshold.get_status(value)
+      def check_threshold(options)
+        if options.is_a?(Hash)
+          name, value = options.to_a.flatten
+        else
+          name = :default
+          value = options
+        end
+        raise Exception, "threshold '#{name}' does not exit" unless self.thresholds[name]
+        self.thresholds[name].get_status(value)
+      end
+
+      def add_threshold(name, values = {})
+        @thresholds[name] ||= Threshold.new
+        @thresholds[name].send(:warn, values[:warn]) if values[:warn]
+        @thresholds[name].send(:crit, values[:crit]) if values[:crit]
       end
 
       private
@@ -64,10 +77,10 @@ module Nagios
             exit
           end
           opt.on("-w", "--warning WARNING", "WARNING Threshold") do |value|
-            threshold.warn(value)
+            add_threshold(:default, :warn => value)
           end
           opt.on("-c", "--critical CRITICAL", "CRITICAL Threshold") do |value|
-            threshold.crit(value)
+            add_threshold(:default, :crit => value)
           end
           yield opt if block_given?
         end.parse!(args)

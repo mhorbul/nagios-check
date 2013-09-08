@@ -17,10 +17,40 @@ describe Nagios::Plugin::Base do
 
   end
 
+  let(:plugin) { Nagios::Plugin::Base.new }
+  let(:threshold) { double }
+  before do
+    Nagios::Plugin::Threshold.stub(:new).and_return(threshold)
+    threshold.stub(:crit)
+    threshold.stub(:warn)
+  end
+
+  it "should check default threshold when name is not provided" do
+    plugin.add_threshold(:default, :warn => "10", :crit => "20")
+    plugin.thresholds[:default].should_receive(:get_status).with(25)
+    plugin.check_threshold(25)
+  end
+
+  it "should check  threshold by name" do
+    plugin.add_threshold(:custom, :warn => "10", :crit => "20")
+    plugin.thresholds[:custom].should_receive(:get_status).with(25)
+    plugin.check_threshold(:custom => 25)
+  end
+
+  it "should raise error when check unknown threshold" do
+    lambda { plugin.check_threshold(:unknown => 25) }.should raise_exception(Exception) { |e| e.to_s.should eq("threshold 'unknown' does not exit") }
+  end
+
+  it "should add threshold" do
+    threshold.should_receive(:warn).with("10")
+    threshold.should_receive(:crit).with("20")
+    plugin.add_threshold(:custom, :warn => "10", :crit => "20")
+    plugin.thresholds[:custom].should eq(threshold)
+  end
+
   context "#nagios_exit" do
 
     it "should exit with unknown status when exit code is not found." do
-      plugin = Nagios::Plugin::Base.new
       begin
         message = capture_output do
           plugin.nagios_exit(:foo, "it works!")
@@ -32,7 +62,6 @@ describe Nagios::Plugin::Base do
     end
 
     it "should exit with OK status" do
-      plugin = Nagios::Plugin::Base.new
       begin
         message = capture_output do
           plugin.nagios_exit(Nagios::OK, "it works!\n")
@@ -44,7 +73,6 @@ describe Nagios::Plugin::Base do
     end
 
     it "should exit with WARNING status" do
-      plugin = Nagios::Plugin::Base.new
       begin
         message = capture_output do
           plugin.nagios_exit(:warning, "does not work.")
@@ -56,7 +84,6 @@ describe Nagios::Plugin::Base do
     end
 
     it "should exit with Unknown status when check method raises error" do
-      plugin = Nagios::Plugin::Base.new
       begin
         message = capture_output do
           plugin.run
@@ -71,29 +98,30 @@ describe Nagios::Plugin::Base do
 
   context "options parser" do
 
-    it "should have threshold" do
-      plugin = Nagios::Plugin::Base.new
-      plugin.threshold.should be_a(Nagios::Plugin::Threshold)
+    it "should have default threshold" do
+      plugin.thresholds.should be_empty
+      threshold.stub(:warn)
+      threshold.stub(:crit)
+      plugin.parse(["-w", "10", "-c", "20"])
+      plugin.thresholds[:default].should eq(threshold)
     end
 
     it "should parse options and setup thresholds" do
-      plugin = Nagios::Plugin::Base.new
-      plugin.threshold.should_receive(:crit).with("20")
-      plugin.threshold.should_receive(:warn).with("10")
+      threshold.should_receive(:crit).with("20")
+      threshold.should_receive(:warn).with("10")
       plugin.parse(["-w", "10", "-c", "20"])
     end
 
     it "should parse long options and setup thresholds" do
-      plugin = Nagios::Plugin::Base.new
-      plugin.threshold.should_receive(:crit).with("@20:40")
-      plugin.threshold.should_receive(:warn).with("10:20")
+      threshold.should_receive(:crit).with("@20:40")
+      threshold.should_receive(:warn).with("10:20")
       plugin.parse(["--warning=10:20", "--critical=@20:40"])
     end
 
     it "should parse other options defined in the child class" do
       plugin = TestPlugin.new
-      plugin.threshold.should_receive(:crit).with("@20:40")
-      plugin.threshold.should_receive(:warn).with("10:20")
+      threshold.should_receive(:crit).with("@20:40")
+      threshold.should_receive(:warn).with("10:20")
       plugin.parse(["--warning=10:20", "--critical=@20:40", "-H", "domain.com", "--port=80"])
       plugin.options[:host] = "domain.com"
       plugin.options[:port] = 80
