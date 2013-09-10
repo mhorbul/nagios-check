@@ -1,8 +1,7 @@
 module Nagios
-
-  module Plugin
-
+  module Check 
     class Range
+
       attr_reader :start_value, :end_value, :start_infinity, :end_infinity, :alert_on
 
       def initialize(range)
@@ -48,5 +47,4 @@ module Nagios
 
     end
   end
-
 end

@@ -23,10 +23,10 @@ module Nagios
     @logger || Logger.new(STDOUT)
   end
 
-  module Plugin
-    autoload :Range,     "nagios/plugin/range"
-    autoload :Threshold, "nagios/plugin/threshold"
-    autoload :Base,      "nagios/plugin/base"
+  module Check 
+    autoload :Range,     "nagios/check/range"
+    autoload :Threshold, "nagios/check/threshold"
+    autoload :Base,      "nagios/check/base"
   end
 
 end

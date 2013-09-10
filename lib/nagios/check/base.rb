@@ -1,5 +1,5 @@
 module Nagios
-  module Plugin
+  module Check
     class Base
 
       attr_reader :thresholds, :options

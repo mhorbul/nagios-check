@@ -7,7 +7,7 @@ $LOAD_PATH.push './lib'
 require 'nagios'
 
 module Nagios
-  module Plugin
+  module Check
     class FileAge < Base
 
       def parse(args)
@@ -35,5 +35,5 @@ module Nagios
   end
 end
 
-nagios = Nagios::Plugin::FileAge.new
+nagios = Nagios::Check::FileAge.new
 nagios.run(ARGV)

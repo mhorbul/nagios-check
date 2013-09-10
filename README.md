@@ -1,4 +1,4 @@
-# Nagios::Plugin
+# Nagios::Check
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'nagios-plugin'
+    gem 'nagios-check'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install nagios-plugin
+    $ gem install nagios-check
 
 ## Usage
 

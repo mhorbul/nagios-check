@@ -8,7 +8,7 @@ require 'redis'
 require 'nagios'
 
 module Nagios
-  module Plugin
+  module Check
     class Redis < Base
 
       def default_options
@@ -67,5 +67,5 @@ module Nagios
   end
 end
 
-nagios = Nagios::Plugin::Redis.new
+nagios = Nagios::Check::Redis.new
 nagios.run(ARGV)

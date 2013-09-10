@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe Nagios::Plugin::Base do
+describe Nagios::Check::Base do
 
-  class TestPlugin < Nagios::Plugin::Base
+  class TestPlugin < Nagios::Check::Base
 
     def parse(args)
       option_parser(args) do |opt|
@@ -17,10 +17,10 @@ describe Nagios::Plugin::Base do
 
   end
 
-  let(:plugin) { Nagios::Plugin::Base.new }
+  let(:plugin) { Nagios::Check::Base.new }
   let(:threshold) { double }
   before do
-    Nagios::Plugin::Threshold.stub(:new).and_return(threshold)
+    Nagios::Check::Threshold.stub(:new).and_return(threshold)
     threshold.stub(:crit)
     threshold.stub(:warn)
   end
@@ -91,7 +91,7 @@ describe Nagios::Plugin::Base do
       rescue SystemExit => e
         e.status.should eq(Nagios::UNKNOWN)
       end
-      message.should eq("UNKNOWN - Nagios::Plugin::Base#check method should be implemented in the child class\n")
+      message.should eq("UNKNOWN - Nagios::Check::Base#check method should be implemented in the child class\n")
     end
 
   end

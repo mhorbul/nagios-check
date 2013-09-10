@@ -1,5 +1,5 @@
 module Nagios
-  module Plugin
+  module Check 
     class Threshold
 
       def initialize(thresholds = {})

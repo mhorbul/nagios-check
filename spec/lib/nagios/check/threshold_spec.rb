@@ -1,25 +1,25 @@
 require 'spec_helper'
 
-describe Nagios::Plugin::Threshold do
+describe Nagios::Check::Threshold do
 
   it "should have warn and crit Ranges" do
-    threshold = Nagios::Plugin::Threshold.new(:warn => "10:20", :crit => "30:40")
-    threshold.warn.should be_a(Nagios::Plugin::Range)
-    threshold.crit.should be_a(Nagios::Plugin::Range)
+    threshold = Nagios::Check::Threshold.new(:warn => "10:20", :crit => "30:40")
+    threshold.warn.should be_a(Nagios::Check::Range)
+    threshold.crit.should be_a(Nagios::Check::Range)
   end
 
   it "should set thresholds" do
-    threshold = Nagios::Plugin::Threshold.new
+    threshold = Nagios::Check::Threshold.new
     threshold.warn.should be_nil
     threshold.crit.should be_nil
     threshold.warn("10:20")
-    threshold.warn.should be_a(Nagios::Plugin::Range)
+    threshold.warn.should be_a(Nagios::Check::Range)
     threshold.crit("30:")
-    threshold.crit.should be_a(Nagios::Plugin::Range)
+    threshold.crit.should be_a(Nagios::Check::Range)
   end
 
   it "should not set threshold when value is not valid" do
-    threshold = Nagios::Plugin::Threshold.new
+    threshold = Nagios::Check::Threshold.new
     threshold.warn.should be_nil
     threshold.crit.should be_nil
     threshold.warn("10::")
@@ -32,7 +32,7 @@ describe Nagios::Plugin::Threshold do
 
     let(:crit_range) { double }
     let(:warn_range) { double }
-    let(:threshold) { Nagios::Plugin::Threshold.new(:warn => "10", :crit => "20") }
+    let(:threshold) { Nagios::Check::Threshold.new(:warn => "10", :crit => "20") }
 
     before do
       threshold.stub(:crit).and_return(crit_range)

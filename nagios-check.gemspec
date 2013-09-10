@@ -1,14 +1,14 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'nagios/plugin/version'
+require 'nagios/check/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "nagios-plugin"
-  spec.version       = Nagios::Plugin::VERSION
+  spec.name          = "nagios-check"
+  spec.version       = Nagios::Check::VERSION
   spec.authors       = ["Max Horbul"]
   spec.email         = ["max@gorbul.net"]
-  spec.description   = %q{Nagios plugin written in Ruby}
-  spec.summary       = %q{This is a base for Nagios plugins in Ruby}
+  spec.description   = %q{Nagios check written in Ruby}
+  spec.summary       = %q{This is a base for Nagios checks development in Ruby}
   spec.homepage      = ""
   spec.license       = "MIT"
 
