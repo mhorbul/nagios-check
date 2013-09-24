@@ -27,3 +27,5 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+<a href="http://twitter.com/home/?status=Thanks @mhorbul for making nagios-check: https://github.com/mhorbul/nagios-check"><img src="https://s3.amazonaws.com/github-thank-you-button/thank-you-button.png" alt="Say Thanks" /></a> :)
