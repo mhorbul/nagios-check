@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'nagios'
+require 'stringio'
 
 def capture_output(&block)
   original_output = STDOUT.clone
